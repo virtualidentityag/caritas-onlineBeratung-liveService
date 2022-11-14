@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://github.com/CaritasDeutschland/caritas-onlineBeratung-liveService/compare/v1.6.0...v1.8.0) (2022-11-14)
+
+
+### Features
+
+* [VIC-795] added fork auto sync config ([c92c8e8](https://github.com/CaritasDeutschland/caritas-onlineBeratung-liveService/commit/c92c8e850ddbc43c96437242ac94f24a6ec76c20))
+* add ghcr registry ([4e4a8f7](https://github.com/CaritasDeutschland/caritas-onlineBeratung-liveService/commit/4e4a8f78ad48ec67bee16b373c283a456800227c))
+* improve dev process ([ec2baf0](https://github.com/CaritasDeutschland/caritas-onlineBeratung-liveService/commit/ec2baf0c5ceae63f63583d1ddd8755f3d1e7c0e7))
+* improve dev processes ([bbeb4c7](https://github.com/CaritasDeutschland/caritas-onlineBeratung-liveService/commit/bbeb4c7dfec0c3c660182765b0da5da9c6d66c6f))
+* updated dockerImage.yml ([cecdc80](https://github.com/CaritasDeutschland/caritas-onlineBeratung-liveService/commit/cecdc80f0b948ecaf4777705ccd949ac761fee66))
+* upgrade keycloak to the latest version ([b1c2e2e](https://github.com/CaritasDeutschland/caritas-onlineBeratung-liveService/commit/b1c2e2ea927f961f870064449006743c64ce2b2e))
+
+
+### Bug Fixes
+
+* fix allowed origin cors pattern error ([39287fb](https://github.com/CaritasDeutschland/caritas-onlineBeratung-liveService/commit/39287fb6bef580a4a2c0617b231c8a41c6db2d95))
+* fix critical CVEs ([60955ff](https://github.com/CaritasDeutschland/caritas-onlineBeratung-liveService/commit/60955ffc83f366a3ed646199247c275e950a1859))
+* fix critical CVEs ([b01dba5](https://github.com/CaritasDeutschland/caritas-onlineBeratung-liveService/commit/b01dba5408dd0f88b8edd7ce5c934051b26b86cb))
+* fix critical CVEs ([c6f138e](https://github.com/CaritasDeutschland/caritas-onlineBeratung-liveService/commit/c6f138e221101f7ccf7ccaa34b9a00089e9f5516))
+* fix critical CVEs ([3e38c10](https://github.com/CaritasDeutschland/caritas-onlineBeratung-liveService/commit/3e38c101898af3bbc4da14fc036cab6d37fe4b57))
+* fix critical CVEs ([099e92c](https://github.com/CaritasDeutschland/caritas-onlineBeratung-liveService/commit/099e92c6e4e6768d9491c6a42329c6b7117de1df))
+* fix spring security version ([b209c95](https://github.com/CaritasDeutschland/caritas-onlineBeratung-liveService/commit/b209c95bfd8a7d9999d301a1955b57325b69ffd9))
+* force safe log4j version ([385f511](https://github.com/CaritasDeutschland/caritas-onlineBeratung-liveService/commit/385f51164c5d1db37a44a967e908a7d487726cfa))
+* remove breaking log4j dependency ([a466b0e](https://github.com/CaritasDeutschland/caritas-onlineBeratung-liveService/commit/a466b0eac346c5471e3ca2c15cb0b454064e0e6d))
+* revert to prev version to solve bug ([21363f5](https://github.com/CaritasDeutschland/caritas-onlineBeratung-liveService/commit/21363f5520c9a75528f0e18b24ea42e5fd30f026))
+* run prettier ([ea0fa1c](https://github.com/CaritasDeutschland/caritas-onlineBeratung-liveService/commit/ea0fa1c6759afbac891ac379172614f16027f573))
+* update log4j ([e6dc025](https://github.com/CaritasDeutschland/caritas-onlineBeratung-liveService/commit/e6dc02508bb2227a9a5baa7e45c13e6a1832f8ad))
+
 ## [1.7.0](https://github.com/CaritasDeutschland/caritas-onlineBeratung-liveService/compare/v1.6.0...v1.7.0) (2021-12-14)
 
 
