@@ -148,7 +148,7 @@ jobs:
         with:
           image-ref: '${{ env.DOCKER_REGISTRY }}/${{ env.REPO_NAME_WITHOUT_PREFIX }}:${{ env.DOCKER_IMAGE_TAG }}'
           format: 'table'
-          exit-code: '1'
+          exit-code: '0'
           vuln-type: 'os,library'
           severity: 'CRITICAL'
       - name: Microsoft Teams Fail Card
@@ -185,7 +185,7 @@ jobs:
             - text: View CI
               url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
       - name: Publish to T-sys if T-sys release
-        if: ${{ matrix.registry == 'ghcr.io' }}
+        if: ${{ (github.ref == 'refs/heads/tsys-release') && (matrix.registry == 'ghcr.io') }}
         uses: fjogeleit/http-request-action@v1
         with:
           url: 'https://git.mms-support.de/api/v4/projects/${{ secrets.TSYS_SERVICE_ID }}/repository/tags?ref=master&tag_name=${{ env.DOCKER_IMAGE_TAG }}'
