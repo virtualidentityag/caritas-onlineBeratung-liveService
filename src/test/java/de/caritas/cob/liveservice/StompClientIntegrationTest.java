@@ -21,7 +21,7 @@ import lombok.SneakyThrows;
 import org.junit.runner.RunWith;
 import org.keycloak.common.VerificationException;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -58,7 +58,7 @@ public abstract class StompClientIntegrationTest extends AbstractJUnit4SpringCon
   };
 
   @LocalServerPort
-  private Integer port;
+  private int port;
 
   private final WebSocketStompClient socketStompClient = new WebSocketStompClient(
       new SockJsClient(singletonList(new WebSocketTransport(new StandardWebSocketClient()))));
