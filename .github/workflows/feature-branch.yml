@@ -17,7 +17,7 @@ jobs:
       - name: Setup JVM
         uses: actions/setup-java@v2
         with:
-          java-version: "11"
+          java-version: 17.0.7
           distribution: "adopt"
           architecture: x64
 

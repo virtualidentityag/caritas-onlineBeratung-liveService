@@ -14,21 +14,25 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.5.14</version>
+		<version>3.0.6</version>
 		<relativePath/>
 	</parent>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<keycloak.version>17.0.0</keycloak.version>
 		<!-- force at least version 2.16 due to https://logging.apache.org/log4j/2.x/security.html -->
-		<log4j.version>2.17.1</log4j.version>
+		<log4j.version>2.19.0</log4j.version>
 		<jackson-databind-nullable.version>0.2.3</jackson-databind-nullable.version>
-		<spring-security.version>5.7.5</spring-security.version>
-		<openapi-generator-maven-plugin.version>5.1.1</openapi-generator-maven-plugin.version>
+		<spring-security.version>6.0.5</spring-security.version>
+		<openapi-generator-maven-plugin.version>6.6.0</openapi-generator-maven-plugin.version>
 		<springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		<ehcache.version>2.10.9.2</ehcache.version>
+		<hibernate.validator.version>8.0.0.Final</hibernate.validator.version>
 	</properties>
 
 	<dependencies>
@@ -41,17 +45,14 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-messaging</artifactId>
-			<version>5.3.5.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
-			<version>5.3.9.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
-			<version>5.3.5.RELEASE</version>
 		</dependency>
 
 		<dependency>
@@ -66,6 +67,22 @@
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache</artifactId>
+			<version>${ehcache.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-databind</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 
 		<dependency>
 			<groupId>org.codehaus.plexus</groupId>
@@ -106,9 +123,21 @@
 		</dependency>
 		<!-- SpringFox: generate YAML file from POJOs and generate documentation -->
 		<dependency>
+			<groupId>io.swagger.core.v3</groupId>
+			<artifactId>swagger-annotations</artifactId>
+			<version>2.2.15</version>
+		</dependency>
+		<!-- SpringFox: generate YAML file from POJOs and generate documentation -->
+		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-boot-starter</artifactId>
 			<version>${springfox-boot-starter.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernate.validator.version}</version>
 		</dependency>
 
 		<!-- Keycloak dependencies -->
@@ -173,6 +202,11 @@
 			<groupId>org.yaml</groupId>
 			<artifactId>snakeyaml</artifactId>
 			<version>2.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents.client5</groupId>
+			<artifactId>httpclient5</artifactId>
 		</dependency>
 
 		<!-- Test dependencies -->
@@ -241,7 +275,7 @@
 			<plugin>
 				<groupId>org.openapitools</groupId>
 				<artifactId>openapi-generator-maven-plugin</artifactId>
-				<version>5.1.1</version>
+				<version>6.6.0</version>
 				<executions>
 					<execution>
 						<goals>
@@ -251,6 +285,7 @@
 							<configOptions>
 								<interfaceOnly>true</interfaceOnly>
 								<sourceFolder>/</sourceFolder>
+								<useSpringBoot3>true</useSpringBoot3>
 							</configOptions>
 							<inputSpec>${project.basedir}/api/liveservice.yaml</inputSpec>
 							<generatorName>spring</generatorName>
