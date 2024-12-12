@@ -2,35 +2,35 @@ package de.caritas.cob.liveservice.websocket.stomphandler;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 import de.caritas.cob.liveservice.websocket.exception.InvalidAccessTokenException;
 import de.caritas.cob.liveservice.websocket.registry.SocketUserRegistry;
 import de.caritas.cob.liveservice.websocket.service.KeycloakTokenObserver;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.keycloak.common.VerificationException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.MockedStatic;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(MessageHeaderAccessor.class)
 public class StompConnectHandlerTest {
+
+  private MockedStatic<MessageHeaderAccessor> mockedMessageHeaderAccessor;
 
   @InjectMocks
   private StompConnectHandler stompConnectHandler;
@@ -50,13 +50,22 @@ public class StompConnectHandlerTest {
   @Mock
   private Message<?> message;
 
-  @Before
+  @BeforeEach
   public void initMocks() {
     when(messageHeaders.get(anyString())).thenReturn("header");
     when(message.getHeaders()).thenReturn(messageHeaders);
-    mockStatic(MessageHeaderAccessor.class);
-    when(MessageHeaderAccessor.getAccessor(any(Message.class), eq(StompHeaderAccessor.class)))
+    mockedMessageHeaderAccessor.when(() -> MessageHeaderAccessor.getAccessor(any(Message.class), eq(StompHeaderAccessor.class)))
         .thenReturn(stompHeaderAccessor);
+  }
+
+  @BeforeEach
+  void setUpStaticMocks() {
+    mockedMessageHeaderAccessor = mockStatic(MessageHeaderAccessor.class);
+  }
+
+  @AfterEach
+  void tearDownStaticMocks() {
+    mockedMessageHeaderAccessor.closeOnDemand();
   }
 
   @Test
@@ -73,14 +82,15 @@ public class StompConnectHandlerTest {
     verifyNoInteractions(this.keycloakTokenObserver, this.socketUserRegistry);
   }
 
-  @Test(expected = InvalidAccessTokenException.class)
-  public void handle_Should_throwInvalidAccessTokenException_When_tokenIsInvalid()
-      throws VerificationException {
-    when(this.stompHeaderAccessor.getFirstNativeHeader(anyString())).thenReturn("accessToken");
-    when(this.keycloakTokenObserver.observeUserId(anyString()))
-        .thenThrow(new VerificationException());
+  @Test
+  public void handle_Should_throwInvalidAccessTokenException_When_tokenIsInvalid() {
+    assertThrows(InvalidAccessTokenException.class, () -> {
+      when(this.stompHeaderAccessor.getFirstNativeHeader(anyString())).thenReturn("accessToken");
+      when(this.keycloakTokenObserver.observeUserId(anyString()))
+          .thenThrow(new VerificationException());
 
-    this.stompConnectHandler.handle(this.message);
+      this.stompConnectHandler.handle(this.message);
+    });
   }
 
   @Test

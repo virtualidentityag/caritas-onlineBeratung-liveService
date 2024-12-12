@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.0.6</version>
+		<version>3.1.12</version>
 		<relativePath/>
 	</parent>
 
@@ -58,7 +58,6 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
-			<version>${spring-security.version}</version>
 		</dependency>
 
 		<!-- Spring actuator  -->
@@ -121,23 +120,10 @@
 			<artifactId>jackson-databind-nullable</artifactId>
 			<version>${jackson-databind-nullable.version}</version>
 		</dependency>
-		<!-- SpringFox: generate YAML file from POJOs and generate documentation -->
-		<dependency>
-			<groupId>io.swagger.core.v3</groupId>
-			<artifactId>swagger-annotations</artifactId>
-			<version>2.2.15</version>
-		</dependency>
-		<!-- SpringFox: generate YAML file from POJOs and generate documentation -->
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-boot-starter</artifactId>
-			<version>${springfox-boot-starter.version}</version>
-		</dependency>
 
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>${hibernate.validator.version}</version>
 		</dependency>
 
 		<!-- Keycloak dependencies -->
@@ -168,12 +154,16 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.2.0</version>
+		</dependency>
 
 		<!-- Apache Commons Lang -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.11</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -190,12 +180,10 @@
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
-			<version>${log4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-to-slf4j</artifactId>
-			<version>${log4j.version}</version>
 		</dependency>
 
 		<dependency>
@@ -220,17 +208,16 @@
 			<groupId>org.powermock</groupId>
 			<scope>test</scope>
 			<version>2.0.2</version>
-		</dependency>
-		<dependency>
-			<artifactId>powermock-api-mockito2</artifactId>
-			<groupId>org.powermock</groupId>
-			<scope>test</scope>
-			<version>2.0.2</version>
+			<exclusions>
+				<exclusion>
+					<groupId>junit</groupId>
+					<artifactId>junit</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.awaitility</groupId>
 			<artifactId>awaitility</artifactId>
-			<version>4.0.3</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -301,7 +288,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.1.1</version>
+				<version>3.6.0</version>
 				<executions>
 					<execution>
 						<id>validate</id>
@@ -357,6 +344,24 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.openrewrite.maven</groupId>
+				<artifactId>rewrite-maven-plugin</artifactId>
+				<version>5.46.1</version>
+				<configuration>
+					<exportDatatables>true</exportDatatables>
+					<activeRecipes>
+						<recipe>org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_1</recipe>
+					</activeRecipes>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.openrewrite.recipe</groupId>
+						<artifactId>rewrite-spring</artifactId>
+						<version>5.24.1</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>

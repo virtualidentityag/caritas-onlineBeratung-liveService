@@ -10,6 +10,7 @@ import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -21,6 +22,7 @@ import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 /**
  * Configuration class to provide the keycloak security configuration.
  */
+@Configuration
 @KeycloakConfiguration
 public class WebSecurityConfig {
 
@@ -30,26 +32,25 @@ public class WebSecurityConfig {
   JwtAuthConverterProperties jwtAuthConverterProperties;
 
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+  SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
     httpSecurity
-        .csrf().disable()
-        .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .sessionAuthenticationStrategy(sessionAuthenticationStrategy())
-        .and()
-        .authorizeRequests()
-        .requestMatchers(SpringFoxConfig.WHITE_LIST).permitAll()
-        .requestMatchers(new NegatedRequestMatcher(new AntPathRequestMatcher("/live"))).permitAll()
-        .requestMatchers(new NegatedRequestMatcher(new AntPathRequestMatcher("/live/**")))
-        .permitAll();
+        .csrf(csrf -> csrf.disable())
+        .sessionManagement(management -> management
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .sessionAuthenticationStrategy(sessionAuthenticationStrategy()))
+        .authorizeHttpRequests(requests -> requests
+            .requestMatchers(SpringFoxConfig.WHITE_LIST).permitAll()
+            .requestMatchers(new NegatedRequestMatcher(new AntPathRequestMatcher("/live"))).permitAll()
+            .requestMatchers(new NegatedRequestMatcher(new AntPathRequestMatcher("/live/**")))
+            .permitAll());
 
-    httpSecurity.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthConverter());
+    httpSecurity.oauth2ResourceServer(server -> server.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter())));
     return httpSecurity.build();
   }
 
   @Bean
-  public JwtAuthConverter jwtAuthConverter() {
+  JwtAuthConverter jwtAuthConverter() {
     return new JwtAuthConverter(jwtAuthConverterProperties, authorisationService);
   }
 
@@ -64,13 +65,13 @@ public class WebSecurityConfig {
    * @return the configured {@link KeycloakConfigResolver}
    */
   @Bean
-  public KeycloakConfigResolver keycloakConfigResolver() {
+  KeycloakConfigResolver keycloakConfigResolver() {
     return new KeycloakSpringBootConfigResolver();
   }
 
   @Bean
   @ConfigurationProperties(prefix = "keycloak", ignoreUnknownFields = false)
-  public KeycloakSpringBootProperties keycloakSpringBootProperties() {
+  KeycloakSpringBootProperties keycloakSpringBootProperties() {
     return new KeycloakSpringBootProperties();
   }
 

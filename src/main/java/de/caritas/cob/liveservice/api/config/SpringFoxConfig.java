@@ -48,7 +48,7 @@ public class SpringFoxConfig {
           "/swagger-resources/**", "/configuration/security", "/swagger-ui", "/swagger-ui/**", "/webjars/**"};
 
   @Bean
-  public Docket apiDocket() {
+  Docket apiDocket() {
     return new Docket(DocumentationType.SWAGGER_2).select()
         .apis(RequestHandlerSelectors.basePackage("de.caritas.cob.liveservice.api")).build()
         .consumes(getContentTypes()).produces(getContentTypes()).apiInfo(getApiInfo())
