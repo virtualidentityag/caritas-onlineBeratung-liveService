@@ -18,13 +18,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
+import org.mockito.MockitoAnnotations;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 
-public class StompAcknowledgeHandlerTest {
+class StompAcknowledgeHandlerTest {
 
   private MockedStatic<MessageHeaderAccessor> mockedMessageHeaderAccessor;
 
@@ -44,16 +45,15 @@ public class StompAcknowledgeHandlerTest {
   private Message<?> message;
 
   @BeforeEach
-  public void initMocks() {
-    when(messageHeaders.get(anyString())).thenReturn("header");
-    when(message.getHeaders()).thenReturn(messageHeaders);
-    mockedMessageHeaderAccessor.when(() -> MessageHeaderAccessor.getAccessor(any(Message.class), eq(StompHeaderAccessor.class)))
-        .thenReturn(stompHeaderAccessor);
-  }
-
-  @BeforeEach
-  void setUpStaticMocks() {
+  void setup() throws Exception {
     mockedMessageHeaderAccessor = mockStatic(MessageHeaderAccessor.class);
+    try (var mocks = MockitoAnnotations.openMocks(this)) {
+      when(messageHeaders.get(anyString())).thenReturn("header");
+      when(message.getHeaders()).thenReturn(messageHeaders);
+      mockedMessageHeaderAccessor.when(() -> MessageHeaderAccessor.getAccessor(any(Message.class),
+              eq(StompHeaderAccessor.class)))
+          .thenReturn(stompHeaderAccessor);
+    }
   }
 
   @AfterEach
@@ -62,21 +62,21 @@ public class StompAcknowledgeHandlerTest {
   }
 
   @Test
-  public void supportedStompCommand_Should_returnAck() {
+  void supportedStompCommand_Should_returnAck() {
     var command = this.stompAcknowledgeHandler.supportedStompCommand();
 
     assertThat(command, is(StompCommand.ACK));
   }
 
   @Test
-  public void handle_Should_useNoServices_When_messageIsNull() {
+  void handle_Should_useNoServices_When_messageIsNull() {
     this.stompAcknowledgeHandler.handle(null);
 
     verifyNoInteractions(this.liveEventMessageQueue);
   }
 
   @Test
-  public void handle_Should_removeQueuedMessageWithId_When_messageHasMessageId() {
+  void handle_Should_removeQueuedMessageWithId_When_messageHasMessageId() {
     when(this.stompHeaderAccessor.getFirstNativeHeader(anyString())).thenReturn("id");
 
     this.stompAcknowledgeHandler.handle(this.message);

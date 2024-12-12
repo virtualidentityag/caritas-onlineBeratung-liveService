@@ -28,7 +28,6 @@
 		<jackson-databind-nullable.version>0.2.3</jackson-databind-nullable.version>
 		<spring-security.version>6.0.5</spring-security.version>
 		<openapi-generator-maven-plugin.version>6.6.0</openapi-generator-maven-plugin.version>
-		<springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
 		<ehcache.version>2.10.9.2</ehcache.version>
@@ -119,6 +118,11 @@
 			<groupId>org.openapitools</groupId>
 			<artifactId>jackson-databind-nullable</artifactId>
 			<version>${jackson-databind-nullable.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.swagger.core.v3</groupId>
+			<artifactId>swagger-annotations</artifactId>
+			<version>2.2.15</version>
 		</dependency>
 
 		<dependency>
@@ -295,7 +299,6 @@
 						<phase>validate</phase>
 						<configuration>
 							<configLocation>google_checks_light.xml</configLocation>
-							<encoding>UTF-8</encoding>
 							<failsOnError>true</failsOnError>
 							<consoleOutput>true</consoleOutput>
 							<failOnViolation>true</failOnViolation>

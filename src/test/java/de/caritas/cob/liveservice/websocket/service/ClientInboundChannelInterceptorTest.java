@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
+import org.mockito.MockitoAnnotations;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHeaders;
@@ -25,7 +26,7 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 
-public class ClientInboundChannelInterceptorTest {
+class ClientInboundChannelInterceptorTest {
 
   private MockedStatic<MessageHeaderAccessor> mockedMessageHeaderAccessor;
 
@@ -45,16 +46,14 @@ public class ClientInboundChannelInterceptorTest {
   private Message<?> message;
 
   @BeforeEach
-  public void initMocks() {
-    when(messageHeaders.get(anyString())).thenReturn("header");
-    when(message.getHeaders()).thenReturn(messageHeaders);
-    mockedMessageHeaderAccessor.when(() -> MessageHeaderAccessor.getAccessor(any(Message.class), eq(StompHeaderAccessor.class)))
-        .thenReturn(stompHeaderAccessor);
-  }
-
-  @BeforeEach
-  void setUpStaticMocks() {
+  void setUp() throws Exception {
     mockedMessageHeaderAccessor = mockStatic(MessageHeaderAccessor.class);
+    try (var mocks = MockitoAnnotations.openMocks(this)) {
+      when(message.getHeaders()).thenReturn(messageHeaders);
+      when(messageHeaders.get(anyString())).thenReturn("header");
+      mockedMessageHeaderAccessor.when(() -> MessageHeaderAccessor.getAccessor(any(Message.class), eq(StompHeaderAccessor.class)))
+          .thenReturn(stompHeaderAccessor);
+    }
   }
 
   @AfterEach
@@ -63,7 +62,7 @@ public class ClientInboundChannelInterceptorTest {
   }
 
   @Test
-  public void preSend_Should_returnUntouchedMessage_When_accessorIsNull() {
+  void preSend_Should_returnUntouchedMessage_When_accessorIsNull() {
     mockedMessageHeaderAccessor.when(() -> MessageHeaderAccessor.getAccessor(any(Message.class), eq(StompHeaderAccessor.class)))
         .thenReturn(null);
 
@@ -74,7 +73,7 @@ public class ClientInboundChannelInterceptorTest {
   }
 
   @Test
-  public void preSend_Should_callRegistryWithExpectedCommand_When_accessorCommandIsConnect() {
+  void preSend_Should_callRegistryWithExpectedCommand_When_accessorCommandIsConnect() {
     when(stompHeaderAccessor.getCommand()).thenReturn(StompCommand.CONNECT);
 
     clientInboundChannelInterceptor.preSend(message, mock(MessageChannel.class));
@@ -83,7 +82,7 @@ public class ClientInboundChannelInterceptorTest {
   }
 
   @Test
-  public void preSend_Should_callRegistryWithExpectedCommand_When_accessorCommandIsSubscribe() {
+  void preSend_Should_callRegistryWithExpectedCommand_When_accessorCommandIsSubscribe() {
     when(stompHeaderAccessor.getCommand()).thenReturn(StompCommand.SUBSCRIBE);
 
     clientInboundChannelInterceptor.preSend(message, mock(MessageChannel.class));
@@ -92,7 +91,7 @@ public class ClientInboundChannelInterceptorTest {
   }
 
   @Test
-  public void preSend_Should_callRegistryWithExpectedCommand_When_accessorCommandIsDisconnect() {
+  void preSend_Should_callRegistryWithExpectedCommand_When_accessorCommandIsDisconnect() {
     when(stompHeaderAccessor.getCommand()).thenReturn(StompCommand.DISCONNECT);
 
     clientInboundChannelInterceptor.preSend(message, mock(MessageChannel.class));
@@ -101,7 +100,7 @@ public class ClientInboundChannelInterceptorTest {
   }
 
   @Test
-  public void preSend_Should_callRegistryWithExpectedCommand_When_accessorCommandIsError() {
+  void preSend_Should_callRegistryWithExpectedCommand_When_accessorCommandIsError() {
     when(stompHeaderAccessor.getCommand()).thenReturn(StompCommand.ERROR);
 
     clientInboundChannelInterceptor.preSend(message, mock(MessageChannel.class));
@@ -110,7 +109,7 @@ public class ClientInboundChannelInterceptorTest {
   }
 
   @Test
-  public void preSend_Should_callRegistryWithExpectedCommand_When_accessorCommandIsAck() {
+  void preSend_Should_callRegistryWithExpectedCommand_When_accessorCommandIsAck() {
     when(stompHeaderAccessor.getCommand()).thenReturn(StompCommand.ACK);
 
     clientInboundChannelInterceptor.preSend(message, mock(MessageChannel.class));

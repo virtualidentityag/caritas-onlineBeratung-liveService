@@ -5,7 +5,6 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +17,7 @@ import org.keycloak.representations.AccessToken;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
+import org.mockito.MockitoAnnotations;
 
 class KeycloakTokenObserverTest {
 
@@ -32,9 +32,11 @@ class KeycloakTokenObserverTest {
   private KeycloakSpringBootProperties keycloakSpringBootProperties;
 
   @BeforeEach
-  void setUpStaticMocks() {
-    mockedKeycloakDeploymentBuilder = mockStatic(KeycloakDeploymentBuilder.class);
-    mockedAdapterTokenVerifier = mockStatic(AdapterTokenVerifier.class);
+  void setUpStaticMocks() throws Exception {
+    try (var mocks = MockitoAnnotations.openMocks(this)) {
+      mockedKeycloakDeploymentBuilder = mockStatic(KeycloakDeploymentBuilder.class);
+      mockedAdapterTokenVerifier = mockStatic(AdapterTokenVerifier.class);
+    }
   }
 
   @AfterEach
