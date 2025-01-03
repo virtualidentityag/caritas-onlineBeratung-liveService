@@ -29,10 +29,11 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSession.Subscription;
 import org.springframework.test.context.TestPropertySource;
@@ -40,6 +41,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @AutoConfigureMockMvc(addFilters = false)
 @TestPropertySource(properties = "spring.profiles.active=testing")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class LiveServiceApplicationIT extends StompClientIntegrationTest {
 
   @Autowired
