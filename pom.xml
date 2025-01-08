@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.1.12</version>
+		<version>3.2.12</version>
 		<relativePath/>
 	</parent>
 
@@ -158,11 +158,6 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
-			<groupId>org.springdoc</groupId>
-			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-			<version>2.2.0</version>
-		</dependency>
 
 		<!-- Apache Commons Lang -->
 		<dependency>
@@ -193,7 +188,6 @@
 		<dependency>
 			<groupId>org.yaml</groupId>
 			<artifactId>snakeyaml</artifactId>
-			<version>2.0</version>
 		</dependency>
 
 		<dependency>
@@ -351,18 +345,18 @@
 			<plugin>
 				<groupId>org.openrewrite.maven</groupId>
 				<artifactId>rewrite-maven-plugin</artifactId>
-				<version>5.46.1</version>
+				<version>5.47.0</version>
 				<configuration>
 					<exportDatatables>true</exportDatatables>
 					<activeRecipes>
-						<recipe>org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_1</recipe>
+						<recipe>org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_2</recipe>
 					</activeRecipes>
 				</configuration>
 				<dependencies>
 					<dependency>
 						<groupId>org.openrewrite.recipe</groupId>
 						<artifactId>rewrite-spring</artifactId>
-						<version>5.24.1</version>
+						<version>5.25.1</version>
 					</dependency>
 				</dependencies>
 			</plugin>

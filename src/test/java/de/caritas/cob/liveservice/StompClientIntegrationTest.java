@@ -41,7 +41,7 @@ import org.springframework.web.socket.sockjs.client.SockJsClient;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = StompClientIntegrationTest.TestConfig.class)
+    classes = {StompClientIntegrationTest.TestConfig.class, TaskSchedulerConfig.class})
 public abstract class StompClientIntegrationTest extends AbstractJUnit4SpringContextTests {
 
   protected static final String SUBSCRIPTION_ENDPOINT = "/user/events";
