@@ -32,7 +32,6 @@ jobs:
           java-version: 17.0.7
           java-package: jdk
           architecture: x64
-
       - name: Caching maven dependencies
         uses: actions/cache@v1
         env:
@@ -44,7 +43,7 @@ jobs:
         run: mvn -B -Pprod  clean package -DskipTests
       - name: Maven Verify
         run: mvn -B -Pprod clean verify
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: targetfiles
           path: target/*.jar
@@ -75,7 +74,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Download buildfiles artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: targetfiles
       - name: Get current time
@@ -191,3 +190,4 @@ jobs:
           url: 'https://git.mms-support.de/api/v4/projects/${{ secrets.TSYS_SERVICE_ID }}/repository/tags?ref=master&tag_name=${{ env.DOCKER_IMAGE_TAG }}'
           method: 'POST'
           customHeaders: '{"PRIVATE-TOKEN": "${{ secrets.TSYS_ACCESS_TOKEN }}"}'
+
